@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
 
-@has_permission_decorator("cadastrar_vendedor")
+# @has_permission_decorator("cadastrar_vendedor")
 def cadastrar_vendedor(request):
     if request.method == "GET":
         vendedores = Users.objects.filter(cargo="V")
@@ -20,6 +20,7 @@ def cadastrar_vendedor(request):
         email = request.POST.get("email")
         senha = request.POST.get("senha")
 
+        # TODO: Fazer validações dos dados
         user = Users.objects.filter(email=email)
 
         if user.exists():
