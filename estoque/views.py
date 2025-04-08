@@ -1,17 +1,19 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls    import reverse
 from PIL import Image, ImageDraw
 from datetime import date
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from django.contrib import messages
 
 from estoque.models import Categoria, Imagem, Produto
 
 def add_produto(request):
     if request.method == "GET":
         categorias = Categoria.objects.all()
-        return render(request, "add_produto.html", {'categorias': categorias})
+        produtos = Produto.objects.all()
+        return render(request, "add_produto.html", {'categorias': categorias, 'produtos': produtos})
     elif request.method == "POST":
         nome = request.POST.get('nome')
         categoria = request.POST.get('categoria')
@@ -47,5 +49,5 @@ def add_produto(request):
             img_dj = Imagem(imagem = img_final, produto=produto)
             img_dj.save()
 
-            
-        return HttpResponse('foi')
+        messages.add_message(request, messages.SUCCESS, "Produto cadastrado com sucesso!")   
+        return redirect(reverse("add_produto"))
